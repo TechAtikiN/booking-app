@@ -3,13 +3,14 @@ package main
 import (
 	"fmt"
 	"strings"
+	"booking-app/helper"
 )
 
 // package level variables cant be declared using :=
 	var conferenceName string = "Go Conference 2023"
-	const conferenceTickets uint = 50
 	var remainingTickets uint = 50
 	var bookings []string // Array of 50 strings
+	const conferenceTickets uint = 50
 
 func main() {
 	// %T is used to print the type of the variable
@@ -20,7 +21,7 @@ func main() {
 	for remainingTickets > 0 && len(bookings) < 50 {
 
 		firstname, lastname, email, userTickets := getUserInput()
-		isValidEmail, isValidName, isValidTicketNumber := validateUserInput(firstname, lastname, email, userTickets)
+		isValidEmail, isValidName, isValidTicketNumber := helper.ValidateUserInput(firstname, lastname, email, userTickets, remainingTickets)
 
 		if isValidEmail && isValidName && isValidTicketNumber {
 			bookings = bookTicket(firstname, lastname, email, userTickets)
@@ -33,8 +34,8 @@ func main() {
 			if(noTicketsRemaining) {
 				fmt.Println("Sorry, all tickets are sold out!")
 				break
-			}	
-		}	else{
+			}
+		}	else {
 				if !isValidName {
 					fmt.Println("Please enter a valid name")
 				} 
@@ -63,17 +64,6 @@ func getFirstNames() []string {
 				firstNames = append(firstNames, names[0])
 		}
 	return firstNames
-}
-
-func validateUserInput(firstname string,
-	lastname string,
-	email string,
-	userTickets uint) (bool, bool, bool) {
-	isValidName := len(firstname) >=2 && len(lastname) >=2
-	isValidEmail := strings.Contains(email, "@")
-	isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets
-
-	return isValidName, isValidEmail, isValidTicketNumber
 }
 
 func getUserInput () (string, string, string, uint) {
